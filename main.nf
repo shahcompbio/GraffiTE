@@ -613,7 +613,7 @@ workflow {
         }
         else {
           Channel.fromPath(params.vcf, checkIfExists: true )
-              .map { v -> [[id: v.basename], v] }
+              .map { v -> [[id: v.baseName], v, []] }
               .set{norm_vcf_ch}
           VCF_FILTER_NORM(norm_vcf_ch, params.reference)
           VCF_FILTER_NORM.out.norm_vcf.map { meta, vcf -> vcf }.set{raw_vcf_ch}

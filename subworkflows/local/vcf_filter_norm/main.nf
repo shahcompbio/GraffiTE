@@ -4,7 +4,7 @@ include { BCFTOOLS_NORM } from '../../../modules/nf-core/bcftools/norm/main'
 
 workflow VCF_FILTER_NORM {
     take:
-    ch_vcf // channel: [ val(meta), [ vcf ] ]
+    ch_vcf // channel: [ val(meta), [ vcf ], [ index ]]
     ref_fasta
 
     main:

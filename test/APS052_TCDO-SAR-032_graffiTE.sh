@@ -26,16 +26,15 @@ mkdir -p ${outdir} ${tmpdir}
 export NXF_SINGULARITY_TMPDIR=${tmpdir}
 cd ${outdir}
 
-nextflow run cgroza/graffiTE \
-  -profile cluster,iris \
+nextflow run $HOME/GraffiTE/main.nf \
+  -profile iris \
   --out ${outdir} \
   --vcf ${vcf} \
   --TE_library ${TE_library} \
   --reference ${ref_genome} \
   --reads ${samplesheet} \
   --mammal \
-  -with-singularity ${sif} \
-  -c ${config} \
   -with-trace \
   -with-report \
+  --normalize_vcf \
   -resume
