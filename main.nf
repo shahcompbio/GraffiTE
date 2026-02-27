@@ -21,6 +21,7 @@ Authors: Cristian Groza and Clément Goubert
 Bug/issues: https://github.com/cgroza/GraffiTE/issues
 
 """
+include { VCF_FILTER_NORM } from './subworkflows/local/vcf_filter_norm/main.nf'
 
 // if user uses global preset for number of cores
 
@@ -607,7 +608,17 @@ workflow {
       } else if (params.assemblies && (params.longreads || params.bams)){
         merge_svim_sniffles2.out.sv_sn_variants_ch.set { raw_vcf_ch }
       } else if(params.vcf){
-        Channel.fromPath(params.vcf, checkIfExists : true).set{raw_vcf_ch}
+        if (!params.normalize_vcf) { 
+          Channel.fromPath(params.vcf, checkIfExists : true).set{raw_vcf_ch}
+        }
+        else {
+          Channel.fromPath(params.vcf, checkIfExists: true )
+              .map { v -> [[id: v.basename], v] }
+              .set{norm_vcf_ch}
+          VCF_FILTER_NORM(norm_vcf_ch, params.reference)
+          VCF_FILTER_NORM.out.norm_vcf.map { meta, vcf -> vcf }.set{raw_vcf_ch}
+        }
+        
       } else {
         error "No --longreads, --assemblies, --vcf or --RM_dir parameters passed to GraffiTE."
       }
