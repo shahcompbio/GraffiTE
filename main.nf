@@ -21,7 +21,7 @@ Authors: Cristian Groza and Clément Goubert
 Bug/issues: https://github.com/cgroza/GraffiTE/issues
 
 """
-include { VCF_FILTER_NORM } from './subworkflows/local/vcf_filter_norm/main.nf'
+include { BCFTOOLS_NORM } from './modules/nf-core/bcftools/norm/main'
 
 // if user uses global preset for number of cores
 
@@ -615,8 +615,8 @@ workflow {
           Channel.fromPath(params.vcf, checkIfExists: true )
               .map { v -> [[id: v.baseName], v, []] }
               .set{norm_vcf_ch}
-          VCF_FILTER_NORM(norm_vcf_ch, params.reference)
-          VCF_FILTER_NORM.out.norm_vcf.map { meta, vcf -> vcf }.set{raw_vcf_ch}
+          BCFTOOLS_NORM(norm_vcf_ch, Channel.fromPath(params.reference).map { f -> [[id: "ref"], f] })
+          BCFTOOLS_NORM.out.vcf.map { meta, vcf -> vcf }.set{raw_vcf_ch}
         }
         
       } else {
