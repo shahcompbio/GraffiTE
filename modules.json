@@ -10,6 +10,16 @@
             "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
             "installed_by": ["modules"]
           },
+          "bcftools/query": {
+            "branch": "master",
+            "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+            "installed_by": ["modules"]
+          },
+          "bcftools/sort": {
+            "branch": "master",
+            "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+            "installed_by": ["modules"]
+          },
           "svtools/vcftobedpe": {
             "branch": "master",
             "git_sha": "fdcc3976e728b5d6ffc3f15979905829531e6072",

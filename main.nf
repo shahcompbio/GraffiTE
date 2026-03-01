@@ -22,7 +22,8 @@ Bug/issues: https://github.com/cgroza/GraffiTE/issues
 
 """
 include { BCFTOOLS_NORM } from './modules/nf-core/bcftools/norm/main'
-include { SVTOOLS_VCFTOBEDPE } from './modules/nf-core/svtools/vcftobedpe/main'
+include { BCFTOOLS_SORT } from './modules/nf-core/bcftools/sort/main'
+include { BCFTOOLS_QUERY } from './modules/nf-core/bcftools/query/main' 
 
 // if user uses global preset for number of cores
 
@@ -637,7 +638,9 @@ workflow {
                       tsd_report.out.tsd_full_group_ch.collect(),
                       tsd_report.out.tsd_sum_group_ch.collect())
     concat_repeatmask.out.vcf_ch.set{vcf_ch}
-    SVTOOLS_VCFTOBEDPE{vcf_ch.map { v -> [[id: v.baseName], v]}}
+    BCFTOOLS_SORT(vcf_ch.map{v -> [[id: v.baseName], v]})
+    BCFTOOLS_QUERY(BCFTOOLS_SORT.out.vcf.map { meta, v -> [meta, v, []]}, [], [], [])
+
   } else {
     // if a vcf is provided as parameter, skip discovery and go directly to genotyping
     Channel.fromPath(params.graffite_vcf).set{vcf_ch}
